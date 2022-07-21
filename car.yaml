@@ -1,0 +1,6 @@
+apiVersion: kuberneddies.dev/v1
+kind: Picture
+metadata:
+  name: "car"
+spec:
+  text: "A red car flying in space"

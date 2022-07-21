@@ -1,0 +1,41 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: pictures.kuberneddies.dev
+spec:
+  group: kuberneddies.dev
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                text:
+                  type: string
+            status:
+              type: object
+              properties:
+                url:
+                  type: string
+                observedGeneration:
+                  type: integer
+                  format: int64
+      subresources:
+        status: {}
+      additionalPrinterColumns:
+        - name: text
+          type: string
+          jsonPath: .spec.text
+        - name: url
+          type: string
+          jsonPath: .status.url
+  scope: Namespaced
+  names:
+    plural: pictures
+    singular: picture
+    kind: Picture

@@ -1,0 +1,6 @@
+apiVersion: kuberneddies.dev/v1
+kind: Picture
+metadata:
+  name: "girl"
+spec:
+  text: "A little girl wearing a traffic cone on her head"
