@@ -18,7 +18,8 @@ import (
 	clientset "github.com/eddiezane/that-conference-k8s-controller/pkg/generated/clientset/versioned"
 	informers "github.com/eddiezane/that-conference-k8s-controller/pkg/generated/informers/externalversions"
 
-	deepai "github.com/eddiezane/that-conference-k8s-controller/pkg/text2image"
+	craiyon "github.com/eddiezane/that-conference-k8s-controller/pkg/craiyon"
+	// deepai "github.com/eddiezane/that-conference-k8s-controller/pkg/text2image"
 )
 
 type controller struct {
@@ -26,7 +27,8 @@ type controller struct {
 	informer cache.SharedIndexInformer
 	client   clientset.Interface
 
-	deepai *deepai.Client
+	craiyon *craiyon.Client
+	// deepai *deepai.Client
 }
 
 func (c *controller) Run(stopCh <-chan struct{}) {
@@ -85,14 +87,13 @@ func (c *controller) processItem(key string) error {
 	}
 
 	picture := item.(*picturesv1.Picture)
-	if err != nil {
-		return fmt.Errorf("unable to split meta: %w", err)
-	}
 
 	if picture.Status.URL == "" || picture.Generation != picture.Status.ObservedGeneration {
 		klog.InfoS("need to sync picture", "key", key)
 
-		url, err := c.deepai.GetImage(picture.Spec.Text)
+		// url, err := c.deepai.GetImage(picture.Spec.Text)
+		url, err := c.craiyon.GetImage(picture.Spec.Text)
+
 		if err != nil {
 			return fmt.Errorf("unable to get image url: %w", err)
 		}
@@ -167,7 +168,8 @@ func NewController(
 		queue:    queue,
 		informer: informer,
 		client:   client,
-		deepai:   deepai.NewClient(),
+		craiyon:  craiyon.NewClient(),
+		// deepai:   deepai.NewClient(),
 	}
 }
 
