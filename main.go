@@ -88,13 +88,3 @@ func NewController(
 		// deepai:   deepai.NewClient(),
 	}
 }
-
-func (c *controller) enqueue(obj interface{}) {
-	key, err := cache.MetaNamespaceKeyFunc(obj)
-	if err != nil {
-		utilruntime.HandleError(err)
-		return
-	}
-	klog.InfoS("adding to queue", "key", key)
-	c.queue.Add(key)
-}
